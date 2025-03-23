@@ -1,3 +1,21 @@
 name: CI - Debug
 
 run-name: Debug - ${{ github.ref_name || github.ref}}
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - test
+
+jobs:
+  ci_debugger:
+    runs-on:
+      - X64
+    steps:
+      - name: Template
+        run: |
+          echo "hello, world"
+
+      - name: Checkout
+        uses: actions/checkout@v4
