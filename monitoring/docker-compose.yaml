@@ -30,7 +30,7 @@ services:
     volumes:
       - ./grafana.ini:/etc/grafana/grafana.ini:ro
       - ./datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
-      - ./node-exporter-dashboard.json:/etc/grafana/provisioning/dashboards
+      - ./node-exporter-dashboard.json:/etc/grafana/provisioning/dashboards/node-exporter-dashboard.json
     ports:
       - "3000:3000"
 
