@@ -1,0 +1,39 @@
+services:
+  node_exporter:
+    image: prom/node-exporter:v1.9.1
+    container_name: node_exporter
+    command:
+      - "--path.rootfs=/host"
+      - "--web.listen-address=:9100"
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - "/:/host:ro,rslave"
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    depends_on:
+      - node_exporter
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - ./grafana.ini:/etc/grafana/grafana.ini:ro
+      - ./datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+      - ./node-exporter-dashboard.json:/etc/grafana/provisioning/dashboards
+    ports:
+      - "3000:3000"
+
+volumes:
+  prometheus-data:
+    name: prometheus-data
